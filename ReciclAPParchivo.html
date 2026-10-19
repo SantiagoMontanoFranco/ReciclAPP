@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campaña de reciclaje escolar</title>
+    <style>
+      :root {
+        --forest: #1f5f3d;
+        --forest-dark: #173f2b;
+        --mint: #dff8eb;
+        --mint-strong: #bfeccf;
+        --lime: #c6ee4c;
+        --green-soft: #e8f9ee;
+        --white: #ffffff;
+        --text: #1f2d24;
+        --muted: #5d6f62;
+        --shadow: 0 18px 40px rgba(34, 76, 52, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(180deg, #f3fff7 0%, #ecf8f0 100%);
+        color: var(--text);
+      }
+
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+
+      .app-shell {
+        width: min(980px, 100%);
+      }
+
+      .screen {
+        display: none;
+      }
+
+      .screen.active {
+        display: block;
+      }
+
+      .selection-card,
+      .panel-card {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(31, 95, 61, 0.08);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .selection-card {
+        padding: 36px 28px;
+        text-align: center;
+      }
+
+      .logo-badge {
+        width: 86px;
+        height: 86px;
+        border-radius: 22px;
+        background: linear-gradient(135deg, var(--forest), #2d8a5d);
+        margin: 0 auto 18px;
+        display: grid;
+        place-items: center;
+        font-size: 2.2rem;
+        color: white;
+        box-shadow: 0 16px 28px rgba(31, 95, 61, 0.25);
+      }
+
+      h1, h2, h3, p {
+        margin-top: 0;
+      }
+
+      .selection-card h1 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        margin-bottom: 10px;
+      }
+
+      .selection-card p {
+        font-size: 1.06rem;
+        color: var(--muted);
+        margin-bottom: 28px;
+      }
+
+      .selector-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      .course-btn,
+      .back-btn,
+      .small-link {
+        border: none;
+        cursor: pointer;
+        font-weight: 700;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .course-btn {
+        min-width: 180px;
+        padding: 22px 20px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, var(--forest), #2a8f60);
+        color: white;
+        font-size: 1.2rem;
+        box-shadow: 0 12px 28px rgba(31, 95, 61, 0.2);
+      }
+
+      .course-btn:hover,
+      .back-btn:hover,
+      .small-link:hover {
+        transform: translateY(-2px);
+      }
+
+      .panel-card {
+        padding: 26px;
+      }
+
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 22px;
+        flex-wrap: wrap;
+      }
+
+      .course-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: clamp(1.8rem, 4vw, 2.5rem);
+        font-weight: 800;
+      }
+
+      .back-btn {
+        background: var(--green-soft);
+        color: var(--forest-dark);
+        border-radius: 12px;
+        padding: 12px 18px;
+      }
+
+      .course-badge {
+        background: linear-gradient(135deg, var(--forest), #2a8f60);
+        color: white;
+        padding: 10px 18px;
+        border-radius: 999px;
+        font-weight: 700;
+      }
+
+      .leader-card {
+        background: linear-gradient(135deg, #effee9 0%, #e3f7d9 100%);
+        border: 1px solid rgba(125, 159, 74, 0.24);
+        border-radius: 20px;
+        padding: 18px 20px;
+        margin-bottom: 20px;
+      }
+
+      .leader-label {
+        display: block;
+        color: var(--forest-dark);
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+
+      .leader-text {
+        font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+        font-weight: 800;
+        color: var(--forest-dark);
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin-bottom: 20px;
+      }
+
+      .card {
+        background: var(--white);
+        border: 1px solid rgba(31, 95, 61, 0.08);
+        border-radius: 20px;
+        padding: 20px;
+      }
+
+      .card h3 {
+        margin-bottom: 12px;
+        font-size: 0.9rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .metric-value {
+        font-size: clamp(1.6rem, 3vw, 2.2rem);
+        font-weight: 800;
+        color: var(--forest-dark);
+        margin-bottom: 6px;
+      }
+
+      .metric-sub {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.96rem;
+      }
+
+      .progress-box {
+        padding: 22px 20px;
+      }
+
+      .progress-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+      }
+
+      .progress-head h3 {
+        margin: 0;
+      }
+
+      .progress-meter {
+        background: #ebf3ee;
+        border-radius: 999px;
+        height: 20px;
+        overflow: hidden;
+        position: relative;
+        margin-bottom: 14px;
+      }
+
+      .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--lime), #74dca0, var(--forest));
+        border-radius: inherit;
+        transition: width 0.35s ease;
+      }
+
+      .progress-caption {
+        margin: 0;
+        font-weight: 700;
+        color: var(--forest-dark);
+      }
+
+      .comparison-box {
+        margin-top: 22px;
+      }
+
+      .course-summary {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        gap: 14px;
+        margin-top: 12px;
+      }
+
+      .summary-name {
+        font-weight: 700;
+      }
+
+      .mini-bar {
+        height: 12px;
+        background: #ecf5ee;
+        border-radius: 999px;
+        overflow: hidden;
+        min-width: 120px;
+      }
+
+      .mini-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #c8ef62, #3aa969);
+        width: 0%;
+        border-radius: inherit;
+      }
+
+      @media (max-width: 680px) {
+        body {
+          padding: 18px;
+        }
+
+        .panel-card,
+        .selection-card {
+          padding: 20px 16px;
+          border-radius: 22px;
+        }
+
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .course-summary {
+          grid-template-columns: 1fr;
+          align-items: start;
+        }
+
+        .selector-buttons {
+          flex-direction: column;
+        }
+
+        .course-btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <section id="selectionScreen" class="screen active">
+        <div class="selection-card">
+          <div class="logo-badge">♻️</div>
+          <h1>Campaña de reciclaje escolar</h1>
+          <p>Selecciona tu curso para ver el progreso de la recolección.</p>
+
+          <div class="selector-buttons">
+            <button class="course-btn" data-course="6A">6°A</button>
+            <button class="course-btn" data-course="6B">6°B</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="progressScreen" class="screen">
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="course-title">
+              <span>🌱</span>
+              <span id="courseHeader">Curso</span>
+            </div>
+            <button id="backBtn" class="back-btn" type="button">← Cambiar de curso</button>
+          </div>
+
+          <div class="leader-card">
+            <span class="leader-label">Curso líder</span>
+            <div id="leaderText" class="leader-text">Calculando...</div>
+          </div>
+
+          <div class="stats-grid">
+            <article class="card">
+              <h3>Meta</h3>
+              <div id="metaText" class="metric-value">0</div>
+              <p id="metaDetail" class="metric-sub">Objetivo</p>
+            </article>
+
+            <article class="card">
+              <h3>Recolectado</h3>
+              <div id="recolectadoText" class="metric-value">0</div>
+              <p id="recolectadoDetail" class="metric-sub">Total acumulado</p>
+            </article>
+
+            <article class="card">
+              <h3>Tiempo</h3>
+              <div id="daysText" class="metric-value">0</div>
+              <p class="metric-sub">días restantes</p>
+            </article>
+          </div>
+
+          <div class="card progress-box">
+            <div class="progress-head">
+              <h3>Progreso</h3>
+              <span id="percentageLabel" class="metric-sub">0%</span>
+            </div>
+            <div class="progress-meter" aria-label="Barra de progreso">
+              <div id="progressFill" class="progress-fill"></div>
+            </div>
+            <p id="progressText" class="progress-caption">0 / 0</p>
+          </div>
+
+          <div class="card comparison-box">
+            <h3>Comparación general</h3>
+            <div class="course-summary">
+              <div class="summary-name">6°A</div>
+              <div class="mini-bar"><div id="miniFillA" class="mini-fill"></div></div>
+              <strong id="summaryA">0%</strong>
+            </div>
+
+            <div class="course-summary">
+              <div class="summary-name">6°B</div>
+              <div class="mini-bar"><div id="miniFillB" class="mini-fill"></div></div>
+              <strong id="summaryB">0%</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      // Datos editables manualmente cada dos semanas.
+      // Cada curso debe tener: meta, recolectado, diasRestantes y la unidad de medida.
+      const cursos = {
+        '6A': {
+          nombre: '6°A',
+          meta: 40,
+          recolectado: 0,
+          diasRestantes: 14,
+          unidad: 'botellas'
+        },
+        '6B': {
+          nombre: '6°B',
+          meta: 40,
+          recolectado: 3,
+          diasRestantes: 2,
+          unidad: 'botellas'
+        }
+      };
+
+      const selectionScreen = document.getElementById('selectionScreen');
+      const progressScreen = document.getElementById('progressScreen');
+      const courseButtons = document.querySelectorAll('.course-btn');
+      const backBtn = document.getElementById('backBtn');
+
+      const courseHeader = document.getElementById('courseHeader');
+      const metaText = document.getElementById('metaText');
+      const metaDetail = document.getElementById('metaDetail');
+      const recolectadoText = document.getElementById('recolectadoText');
+      const recolectadoDetail = document.getElementById('recolectadoDetail');
+      const daysText = document.getElementById('daysText');
+      const percentageLabel = document.getElementById('percentageLabel');
+      const progressFill = document.getElementById('progressFill');
+      const progressText = document.getElementById('progressText');
+      const leaderText = document.getElementById('leaderText');
+
+      const miniFillA = document.getElementById('miniFillA');
+      const miniFillB = document.getElementById('miniFillB');
+      const summaryA = document.getElementById('summaryA');
+      const summaryB = document.getElementById('summaryB');
+
+      function calcularPorcentaje(recolectado, meta) {
+        if (!meta || meta <= 0) return 0;
+        return (recolectado / meta) * 100;
+      }
+
+      function obtenerLider() {
+        const cursosArray = Object.entries(cursos).map(([codigo, curso]) => ({
+          codigo,
+          nombre: curso.nombre,
+          porcentaje: calcularPorcentaje(curso.recolectado, curso.meta)
+        }));
+
+        const cursoLider = cursosArray.reduce((ganador, actual) => {
+          if (actual.porcentaje > ganador.porcentaje) {
+            return actual;
+          }
+          return ganador;
+        }, cursosArray[0]);
+
+        return cursoLider;
+      }
+
+      function actualizarComparacionGeneral() {
+        const cursoA = cursos['6A'];
+        const cursoB = cursos['6B'];
+
+        const porcentajeA = calcularPorcentaje(cursoA.recolectado, cursoA.meta);
+        const porcentajeB = calcularPorcentaje(cursoB.recolectado, cursoB.meta);
+
+        miniFillA.style.width = `${Math.min(porcentajeA, 100)}%`;
+        miniFillB.style.width = `${Math.min(porcentajeB, 100)}%`;
+        summaryA.textContent = `${Math.round(porcentajeA)}%`;
+        summaryB.textContent = `${Math.round(porcentajeB)}%`;
+      }
+
+      function mostrarCurso(codigoCurso) {
+        const curso = cursos[codigoCurso];
+        if (!curso) return;
+
+        const porcentaje = calcularPorcentaje(curso.recolectado, curso.meta);
+        const porcentajeRedondeado = Math.round(porcentaje);
+        const leader = obtenerLider();
+
+        selectionScreen.classList.remove('active');
+        progressScreen.classList.add('active');
+
+        courseHeader.textContent = curso.nombre;
+        metaText.textContent = `Meta: ${curso.meta} ${curso.unidad}`;
+        metaDetail.textContent = `Objetivo del reto`;
+        recolectadoText.textContent = `${curso.recolectado} ${curso.unidad}`;
+        recolectadoDetail.textContent = `Acumulado por el curso`;
+        daysText.textContent = `${curso.diasRestantes}`;
+        percentageLabel.textContent = `${porcentajeRedondeado}%`;
+        progressText.textContent = `${curso.recolectado} / ${curso.meta} ${curso.unidad}`;
+
+        const ancho = Math.min(porcentaje, 100);
+        progressFill.style.width = `${ancho}%`;
+
+        if (leader.nombre === curso.nombre) {
+          leaderText.textContent = `${curso.nombre} va a la cabeza`;
+        } else {
+          leaderText.textContent = `${leader.nombre} va a la cabeza`;
+        }
+
+        actualizarComparacionGeneral();
+      }
+
+      courseButtons.forEach((button) => {
+        button.addEventListener('click', (event) => {
+          const cursoSeleccionado = event.currentTarget.dataset.course;
+          mostrarCurso(cursoSeleccionado);
+        });
+      });
+
+      backBtn.addEventListener('click', () => {
+        progressScreen.classList.remove('active');
+        selectionScreen.classList.add('active');
+      });
+
+      actualizarComparacionGeneral();
+    </script>
+  </body>
+</html>
