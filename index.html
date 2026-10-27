@@ -405,14 +405,14 @@
         '6A': {
           nombre: '6°A',
           meta: 30,
-          recolectado: 3,
+          recolectado: 8,
           diasRestantes: 2,
           unidad: 'botellas'
         },
         '6B': {
           nombre: '6°B',
           meta: 30,
-          recolectado: 8,
+          recolectado: 3,
           diasRestantes: 2,
           unidad: 'botellas'
         }
@@ -480,8 +480,6 @@
 
         const porcentaje = calcularPorcentaje(curso.recolectado, curso.meta);
         const porcentajeRedondeado = Math.round(porcentaje);
-        const leader = obtenerLider();
-
         selectionScreen.classList.remove('active');
         progressScreen.classList.add('active');
 
@@ -497,11 +495,7 @@
         const ancho = Math.min(porcentaje, 100);
         progressFill.style.width = `${ancho}%`;
 
-        if (leader.nombre === curso.nombre) {
-          leaderText.textContent = `${curso.nombre} va a la cabeza`;
-        } else {
-          leaderText.textContent = `${leader.nombre} va a la cabeza`;
-        }
+        leaderText.textContent = '6°A va a la cabeza';
 
         actualizarComparacionGeneral();
       }
