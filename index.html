@@ -405,14 +405,14 @@
         '6A': {
           nombre: '6°A',
           meta: 30,
-          recolectado: 8,
+          recolectado: 10,
           diasRestantes: 2,
           unidad: 'botellas'
         },
         '6B': {
           nombre: '6°B',
           meta: 30,
-          recolectado: 3,
+          recolectado: 10,
           diasRestantes: 2,
           unidad: 'botellas'
         }
@@ -495,7 +495,7 @@
         const ancho = Math.min(porcentaje, 100);
         progressFill.style.width = `${ancho}%`;
 
-        leaderText.textContent = '6°A va a la cabeza';
+        leaderText.textContent = 'Los dos cursos están empatados';
 
         actualizarComparacionGeneral();
       }
